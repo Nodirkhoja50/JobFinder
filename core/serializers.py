@@ -26,3 +26,5 @@ class PhoneTokenValidateSerializer(ModelSerializer):
     class Meta:
         model = PhoneToken
         fields = ('pk','otp')
+
+#class LogInSerializer(ModelSerializer):

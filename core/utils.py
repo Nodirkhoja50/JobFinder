@@ -32,15 +32,14 @@ def success(message=None):
 
 
 def user_detail(user, last_login):
-    try:
+    '''    try:
         token = user.auth_token.key
     except:
         token = Token.objects.create(user=user)
-        token = token.key
+        token = token.key'''
     user_json = {
         "id": user.pk,
         "last_login": last_login,
-        "token": token,
         "status": status.HTTP_200_OK
     }
     return user_json

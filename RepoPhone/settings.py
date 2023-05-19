@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 
 from pathlib import Path
-import os
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -35,13 +33,25 @@ SECRET_KEY = '=fdion+*r8yx=25q$zy)wnzx&(l=vl^(gy71^hk@5u(kg80vva'
 PHONE_LOGIN_OTP_HASH_ALGORITHM = 'sha256'
 ESKIZ_EMAIL = "uone2323@gmail.com"
 ESKIZ_PASSWORD = "uGKnO0ptNkleDlJh9CxvjOVr7nTWg7hry9xMgyCq"
+PHONE_NUMBER_FIELD = 'phone_number'
+
+'''AUTHENTICATION_BACKENDS=("django.contrib.auth.backends.ModelBackend",
+                         "core.phone_backend.PhoneBackend",)
+'''
+
 # Application definition
+'''REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}'''
 
 INSTALLED_APPS = [
     'core',
 
     'rest_framework',
-
+    'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,7 +71,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'RepoPhone.urls'
-import os 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
