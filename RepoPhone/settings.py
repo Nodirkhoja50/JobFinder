@@ -12,6 +12,18 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 
 from pathlib import Path
+from datetime import timedelta  
+
+
+'''SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
+    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=1),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": False,
+}'''
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,29 +39,29 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-PHONE_LOGIN_ATTEMPTS = 10
+PHONE_LOGIN_ATTEMPTS = 1000
 PHONE_LOGIN_OTP_LENGTH = 6
+PHONE_LOGIN_MINUTES = 3
+PHONE_NUMBER_FIELD = 'phone_number'
 SECRET_KEY = '=fdion+*r8yx=25q$zy)wnzx&(l=vl^(gy71^hk@5u(kg80vva'
 PHONE_LOGIN_OTP_HASH_ALGORITHM = 'sha256'
 ESKIZ_EMAIL = "uone2323@gmail.com"
 ESKIZ_PASSWORD = "uGKnO0ptNkleDlJh9CxvjOVr7nTWg7hry9xMgyCq"
-PHONE_NUMBER_FIELD = 'phone_number'
 
-'''AUTHENTICATION_BACKENDS=("django.contrib.auth.backends.ModelBackend",
-                         "core.phone_backend.PhoneBackend",)
-'''
+
+
 
 # Application definition
-'''REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ]
-}'''
+
 
 INSTALLED_APPS = [
-    'core',
+    #app
+    'api',
+    'work',
+    'search',
+    'specialty',
 
+    
     'rest_framework',
     'rest_framework.authtoken',
     'django.contrib.admin',
@@ -58,6 +70,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
+    'location_field.apps.DefaultConfig',
+
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -90,7 +107,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'RepoPhone.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -143,3 +159,42 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'core.PhoneNumberAbstractUser'
+
+
+
+
+TIME_ZONE = 'Asia/Samarkand'
+USE_TZ = True
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'backend.phone_backend.PhoneBackend',
+                           )
+
+
+LOCATION_FIELD = {
+    'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
+    'provider.google.api_key': '<PLACE YOUR API KEY HERE>',
+    'provider.google.api_libraries': '',
+    'provider.google.map.type': 'ROADMAP',
+}
+
+
+AUTH_TOKEN_VALIDITY = timedelta(minutes=1)
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.SessionAuthentication',
+        #'core.authtoken.ExpiringTokenAuthentication', 
+
+       
+    ),
+   'DEFAULT_PERMISSION_CLASSES': [
+       'rest_framework.permissions.AllowAny',
+   ],
+
+
+   'DEFAULT_PAGINATION_CLASS':"api.paginations.CustomPagination",
+   'PAGE_SIZE' :10
+}

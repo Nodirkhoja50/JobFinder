@@ -5,26 +5,28 @@ import os
 import re
 import hashlib
 from django.conf import settings
+from django.contrib import auth
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import BaseUserManager,AbstractBaseUser,PermissionsMixin
+from django.contrib.auth.models import BaseUserManager,AbstractBaseUser,AbstractUser,PermissionsMixin
 from phonenumber_field.modelfields import PhoneNumberField
 from eskiz_sms import EskizSMS
+from django.contrib.auth.models import User
+from specialty.models import Specialty
 eskiz = EskizSMS(email=getattr(settings,"ESKIZ_EMAIL"),password=getattr(settings,"ESKIZ_PASSWORD"))
 
 
 # Create your models here.
 class UserManager(BaseUserManager):
-    use_in_migrations = True
     def create_superuser(self,username,phone_number,password,**other_fields):
         other_fields.setdefault('is_staff',True)
         other_fields.setdefault('is_superuser',True)
         other_fields.setdefault('is_active',True)
         if other_fields.get('is_staff') is not True:
             raise ValueError('Superuser must be assigned is_staff=True')
-        if other_fields.get('is_superuser') is True:
+        if other_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must be assigned is_staff=True') 
-        return self.create_user(username,phone_number,password,*other_fields)
+        return self.create_user(username,phone_number,password,**other_fields)
     
 
     def create_user(self,username,phone_number,password,**other_fields):
@@ -36,25 +38,34 @@ class UserManager(BaseUserManager):
             **other_fields
         )
         
-        user = self.set_password(password)
+        user.set_password(password)
         user.save(using = self._db)
         return user
     
 class PhoneNumberAbstractUser(AbstractBaseUser,PermissionsMixin):
-    #phone_number = PhoneNumberField(unique = True)
-    user_name = models.CharField(max_length=100)
+    phone_number = PhoneNumberField(unique = True)
+    username = models.CharField(max_length=50)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
+    specialty = models.CharField(max_length=2,
+                                choices=Specialty.Status.choices,
+                                default=Specialty.Status.Courier)
     objects = UserManager()
+    
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = ['username']
 
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
-        abstract = True
+        
     def __str__(self) -> str:
         return f'{self.phone_number}'
     
 class PhoneToken(models.Model):
     phone_number = PhoneNumberField(editable = False)
-    
+    username = models.CharField(max_length=50)
     otp = models.CharField(max_length=42,editable=False)
     timestamp = models.DateTimeField(auto_now_add=True,editable=False)
     last_login = models.DateField(auto_now=True)
@@ -86,7 +97,7 @@ class PhoneToken(models.Model):
                 {"otp":otp,"id":phone_token.id}
             )
             
-            #eskiz.send_sms(number,sms_body,from_whom = '4546',callback_url=None)
+            eskiz.send_sms(number,sms_body,from_whom = '4546',callback_url=None)
             return phone_token
         else:
             return False
@@ -98,4 +109,5 @@ class PhoneToken(models.Model):
         m.update(os.urandom(16))
         otp = str(int(m.hexdigest(),16))[-length:]
         return otp
+
 

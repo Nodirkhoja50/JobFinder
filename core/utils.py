@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-
+from .authtoken import token_expire_handler,expires_in
 STATUS = {
     "status": None,
     "message": None,
@@ -30,19 +30,23 @@ def success(message=None):
     STATUS["message"] = message
     return (STATUS, STATUS["status"])
 
-
 def user_detail(user, last_login):
-    '''    try:
+    try:
         token = user.auth_token.key
     except:
         token = Token.objects.create(user=user)
-        token = token.key'''
+        token = token.key
     user_json = {
         "id": user.pk,
         "last_login": last_login,
+        "token": token,
         "status": status.HTTP_200_OK
     }
+
+    is_expired ,token =  token_expire_handler(token)
+    #print("this is expires_in",expires_in(token1))
     return user_json
+
 
 
 def model_field_attr(model, model_field, attr):
@@ -51,3 +55,4 @@ def model_field_attr(model, model_field, attr):
     """
     fields = dict([(field.name, field) for field in model._meta.fields])
     return getattr(fields[model_field], attr)
+
