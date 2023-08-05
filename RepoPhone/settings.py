@@ -37,7 +37,7 @@ SECRET_KEY = 'django-insecure-z6dz)lm)hmq(0zwy=wp+0==)fw&$6+7$fiy8fxe(gl*u(pnfyr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.16.35','192.168.17.13','192.168.16.235','localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 PHONE_LOGIN_ATTEMPTS = 1000
 PHONE_LOGIN_OTP_LENGTH = 6
