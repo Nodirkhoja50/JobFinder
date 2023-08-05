@@ -32,12 +32,22 @@ def success(message=None):
 
 def user_detail(user, last_login):
     try:
+        username = ""
         token = user.auth_token.key
     except:
         token = Token.objects.create(user=user)
+        #username= Token.objects.get(key=token).user
         token = token.key
+        #username= (Token.objects.get(key=token.key))
+        #username = token.user
+        #username = Token.objects.get(key=token).user
+        #print(username)
+        '''if last_login:
+            print("username")
+            username = Token.objects.get(key=token).user'''
     user_json = {
         "id": user.pk,
+        "username":user.username,
         "last_login": last_login,
         "token": token,
         "status": status.HTTP_200_OK
@@ -46,6 +56,7 @@ def user_detail(user, last_login):
     is_expired ,token =  token_expire_handler(token)
     #print("this is expires_in",expires_in(token1))
     return user_json
+
 
 
 

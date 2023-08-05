@@ -56,8 +56,8 @@ class PhoneBackend(ModelBackend):
         phone_number = phone_token.phone_number
         kwargs.update(self.get_phone_number_data(phone_number))
         user = self.user_model.objects.create_user(**kwargs)
-        print("this is kwarg",kwargs)
-        print("this is user",user)
+        #print("this is kwarg",kwargs)
+        #print("this is user",user)
         return user
 
     def authenticate(self, request, pk=None, otp=None, **extra_fields):

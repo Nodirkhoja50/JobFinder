@@ -37,7 +37,7 @@ SECRET_KEY = 'django-insecure-z6dz)lm)hmq(0zwy=wp+0==)fw&$6+7$fiy8fxe(gl*u(pnfyr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['192.168.16.35','192.168.17.13','192.168.16.235','localhost', '127.0.0.1']
 
 PHONE_LOGIN_ATTEMPTS = 1000
 PHONE_LOGIN_OTP_LENGTH = 6
@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'search',
     'specialty',
 
-    
+    'rest_framework_swagger',
     'rest_framework',
     'rest_framework.authtoken',
     'django.contrib.admin',
@@ -85,6 +85,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 ]
 
 ROOT_URLCONF = 'RepoPhone.urls'
@@ -111,12 +112,25 @@ WSGI_APPLICATION = 'RepoPhone.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}'''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'job', 
+        'USER': 'postgres',
+        'PASSWORD': '2000',
+        'HOST': 'localhost', 
+        'PORT': '5432',
+    }
 }
+
+
 
 
 # Password validation
@@ -195,6 +209,8 @@ REST_FRAMEWORK = {
    ],
 
 
-   'DEFAULT_PAGINATION_CLASS':"api.paginations.CustomPagination",
-   'PAGE_SIZE' :10
 }
+
+
+   #  'DEFAULT_PAGINATION_CLASS':"api.paginations.CustomPagination",
+     #  'PAGE_SIZE' :10"""

@@ -13,6 +13,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from eskiz_sms import EskizSMS
 from django.contrib.auth.models import User
 from specialty.models import Specialty
+#from work.models import Vacancy
 eskiz = EskizSMS(email=getattr(settings,"ESKIZ_EMAIL"),password=getattr(settings,"ESKIZ_PASSWORD"))
 
 
@@ -49,8 +50,14 @@ class PhoneNumberAbstractUser(AbstractBaseUser,PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     specialty = models.CharField(max_length=2,
-                                choices=Specialty.Status.choices,
-                                default=Specialty.Status.Courier)
+                                choices=Specialty.Uz_Status.choices,
+                                blank=True)
+    latitude = models.CharField(max_length=20)
+    longitude = models.CharField(max_length=20)
+    city = models.CharField(max_length=200)
+    county = models.CharField(max_length=200)
+    tg_username = models.URLField(max_length=200)
+    favorites = models.ManyToManyField('work.Vacancy', related_name='favorited_by')
     objects = UserManager()
     
     USERNAME_FIELD = 'phone_number'
@@ -61,7 +68,7 @@ class PhoneNumberAbstractUser(AbstractBaseUser,PermissionsMixin):
         verbose_name_plural = _('users')
         
     def __str__(self) -> str:
-        return f'{self.phone_number}'
+        return f'{self.username}'
     
 class PhoneToken(models.Model):
     phone_number = PhoneNumberField(editable = False)
@@ -94,10 +101,10 @@ class PhoneToken(models.Model):
 
             sms_body=render_to_string(
                 "otp.txt",
-                {"otp":otp,"id":phone_token.id}
+                {"otp":otp}
             )
-            
-            eskiz.send_sms(number,sms_body,from_whom = '4546',callback_url=None)
+
+            #eskiz.send_sms(number,sms_body,from_whom = '4546',callback_url=None)
             return phone_token
         else:
             return False

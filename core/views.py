@@ -1,15 +1,23 @@
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
-from rest_framework.generics import CreateAPIView,UpdateAPIView
+from rest_framework.generics import CreateAPIView,UpdateAPIView,ListAPIView
 from django.contrib.auth import authenticate,login
 from rest_framework.response import Response
 from .models import PhoneToken,PhoneNumberAbstractUser
+from core.authtoken import ExpiringTokenAuthentication
 from .serializers import (
-    PhoneTokenCreateSerializer, PhoneTokenValidateSerializer,WriteUserNameSerializer
+    PhoneTokenCreateSerializer, 
+    PhoneTokenValidateSerializer,
+    WriteUserNameSerializer,
+    SelectSpecialtySerializer
 )
+
 from .utils import user_detail
-from .mixins import WriteYourNamePermissionMixin
+from core.mixins import WriteYourNamePermissionMixin    
+from django.shortcuts import get_object_or_404
+
+from rest_framework.views import APIView
 
 
 class GenerateOTP(CreateAPIView):
@@ -93,17 +101,15 @@ class ValidateOTP(CreateAPIView):
         return Response(
             {'reason': ser.errors}, status=status.HTTP_406_NOT_ACCEPTABLE)
     
-class WriteNameAPIView(WriteYourNamePermissionMixin,UpdateAPIView):
+class WriteNameAPIView(UpdateAPIView):
     queryset = PhoneNumberAbstractUser.objects.all()
     serializer_class = WriteUserNameSerializer
+    authentication_classes = [ExpiringTokenAuthentication]
     lookup_field = 'pk'
     def perform_update(self, serializer):
         instance = serializer.save()
         
     
-
-
-
 
 
 

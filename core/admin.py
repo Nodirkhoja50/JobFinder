@@ -8,7 +8,7 @@ class PhoneTokenAdmin(admin.ModelAdmin):
 admin.site.register(PhoneToken,PhoneTokenAdmin)
 
 class PhoneAbstractUser(admin.ModelAdmin):
-    list_display = ('id','phone_number','username','last_login',"is_staff")
+    list_display = ('id','phone_number','username','specialty','city','county','last_login',"is_staff")
     search_fields = ('phone_number', )
 admin.site.register(PhoneNumberAbstractUser,PhoneAbstractUser)
 #admin.site.register(PhoneNumberAbstractUser)

@@ -13,7 +13,7 @@ from django.utils import timezone
 def expires_in(token):
     token = Token.objects.get(key=token)
     time_elapsed = timezone.now() - token.created
-    left_time = timedelta(minutes = 30) - time_elapsed
+    left_time = timedelta(days = 7) - time_elapsed
     return left_time
 
 # token checker if token expired or not

@@ -29,4 +29,7 @@ class WriteUserNameSerializer(ModelSerializer):
 
 
 
-
+class SelectSpecialtySerializer(ModelSerializer):
+    class Meta:
+        model = PhoneNumberAbstractUser
+        fields =('specialty',)
