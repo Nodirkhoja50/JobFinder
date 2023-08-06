@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta  
+import os 
 
 
 '''SIMPLE_JWT = {
@@ -214,3 +215,5 @@ REST_FRAMEWORK = {
 
    #  'DEFAULT_PAGINATION_CLASS':"api.paginations.CustomPagination",
      #  'PAGE_SIZE' :10"""
+
+STATIC_ROOT=os.path.join(BASE_DIR,"static/")
