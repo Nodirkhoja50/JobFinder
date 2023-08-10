@@ -89,15 +89,15 @@ class Vacancy(models.Model):
     slug = models.SlugField(max_length=250,unique=False)
     specialty = models.CharField(max_length=2,
                                 choices=Specialty.Uz_Status.choices,
-                                blank=True)
+                                blank=False)
     company_name = models.CharField(max_length=50,blank=True)
     city = models.CharField(max_length=50)
     county = models.CharField(max_length=30)
     description = models.TextField()
     favorites = models.ManyToManyField(PhoneNumberAbstractUser, related_name='favorited_by')
     currency = models.CharField(max_length=2,choices=Currency.choices,default=Currency.sum,blank=False)
-    from_salary = models.DecimalField(max_digits=50,decimal_places=0,default=0,blank=False)
-    to_salary = models.DecimalField(max_digits=50,decimal_places=0,default=0,blank=True)
+    from_salary = models.IntegerField(default=0,blank=False)
+    to_salary = models.IntegerField(default=0,blank=True)
     bargain = models.BooleanField(default=False)
     is_online = models.BooleanField(default=False)
     tg_contact = models.CharField(max_length=50,blank=False)
@@ -123,11 +123,11 @@ class Vacancy(models.Model):
                            args=[self.slug,
                            self.pk])
     
-    def get_from_salary(self):
+    '''def get_from_salary(self):
         return int(self.from_salary)
     
     def get_to_salary(self):
-        return int(self.to_salary)
+        return int(self.to_salary)'''
 
     @classmethod
     def update_is_public(cls,elm):

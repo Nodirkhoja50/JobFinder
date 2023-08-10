@@ -5,8 +5,8 @@ from api.serializers import UserPublicSerializer,VacancyInlineSerializer
 from core.models import PhoneNumberAbstractUser
 class CreateUpdateDetailVacancySerializers(serializers.ModelSerializer):
     owner = UserPublicSerializer(read_only=True)
-    to_salary = serializers.SerializerMethodField(read_only = True)
-    from_salary = serializers.SerializerMethodField(read_only = True)
+    ''' to_salary = serializers.SerializerMethodField(read_only = True)
+    from_salary = serializers.SerializerMethodField(read_only = True)'''
     class Meta:
         model = Vacancy
         fields =[
@@ -26,12 +26,12 @@ class CreateUpdateDetailVacancySerializers(serializers.ModelSerializer):
             #"is_public",
             'created_at', 
         ]
-    def get_from_salary(self,obj):
+    '''def get_from_salary(self,obj):
         return obj.get_from_salary()
     
 
     def get_to_salary(self,obj):
-        return obj.get_to_salary()
+        return obj.get_to_salary()'''
 
        
 
@@ -40,8 +40,7 @@ class ListVacancySerializers(serializers.ModelSerializer):
         view_name='detail',
         lookup_field = "slug/"
     )'''
-    to_salary = serializers.SerializerMethodField(read_only = True)
-    from_salary = serializers.SerializerMethodField(read_only = True)
+    liked = serializers.SerializerMethodField(read_only = True)
     url = serializers.SerializerMethodField(read_only = True)
     class Meta:
         model = Vacancy
@@ -49,6 +48,8 @@ class ListVacancySerializers(serializers.ModelSerializer):
             #'owner',
             'title',
             'url',
+            #'favorites',
+            'liked',
             'description',
             'company_name',
             #location 
@@ -61,15 +62,15 @@ class ListVacancySerializers(serializers.ModelSerializer):
             'county',
             'created_at', 
         ]
-    def get_from_salary(self,obj):
-        return obj.get_from_salary()
     
-
-    def get_to_salary(self,obj):
-        return obj.get_to_salary()
-
     def get_url(self,obj):
             return obj.get_absolute_url()
+    
+    def get_liked(self,obj):
+        user = self.context.get('request').user
+        if user.is_authenticated and user.favorites.filter(pk=obj.pk).exists():
+            return True
+        return False
     
 class UpdatePublicVacancySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)

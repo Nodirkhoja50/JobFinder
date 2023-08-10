@@ -38,7 +38,7 @@ SECRET_KEY = 'django-insecure-z6dz)lm)hmq(0zwy=wp+0==)fw&$6+7$fiy8fxe(gl*u(pnfyr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['95.130.227.203']
 
 PHONE_LOGIN_ATTEMPTS = 1000
 PHONE_LOGIN_OTP_LENGTH = 6
@@ -124,8 +124,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'job', 
-        'USER': 'postgres',
-        'PASSWORD':'1979',
+        'USER': 'khuja',#postgres
+        'PASSWORD':'1979',#2000
         'HOST': 'localhost', 
         'PORT': '5432',
     }

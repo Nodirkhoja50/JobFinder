@@ -19,8 +19,8 @@ urlpatterns = [
     path("update/<int:pk>",udpate_vacancy_api,name='update'),
     path("myaccount",my_account_api,name="account"),
     path("myaccount/edit/makeprivate",make_private_vacancy,name='make-private'),
-    path('add-favorite/<int:pk>', AddFavoriteView.as_view(), name='add_favorite'),
-    path('remove-favorite/<int:pk>',RemoveFavoriteView.as_view()),
-    path('list-favorite',ListFavoriteView.as_view())
+    path('add-favourite/<int:pk>', AddFavoriteView.as_view(), name='add_favorite'),
+    path('remove-favourite/<int:pk>',RemoveFavoriteView.as_view()),
+    path('list-favourite',ListFavoriteView.as_view())
     #path("make_vacancy_private/<int:owner>/<int:id>",MakePrivate.as_view()),
 ] 

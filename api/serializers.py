@@ -33,4 +33,3 @@ class VacancyInlineSerializer(serializers.Serializer):
         if request is None:
             return None
         return reverse("work:make-private",request=request)
-    

@@ -34,7 +34,8 @@ class CreateVacancyAPIView(CreateAPIView):
         #print(type(salary))
         #barging = serializer.validated_data.get('bargain')
         title = serializer.validated_data.get('title')
-        title = serializer.validated_data.get('from_salary')
+        salary = serializer.validated_data.get('from_salary')
+        print(type(salary))
         if title:
             slug = title.lower().replace(' ', '-')  
         #salary = Vacancy.is_negotiable(salary,barging) 
